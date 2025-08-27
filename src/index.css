@@ -1,0 +1,9 @@
+body { margin:0; font-family: sans-serif; background:#121212; color:white; }
+.app { display:flex; height:100vh; }
+.sidebar { width:300px; background:#1e1e1e; padding:16px; display:flex; flex-direction:column; }
+.header h1 { margin:0; font-size:20px; }
+.search input { width:100%; padding:8px; margin:8px 0; border-radius:4px; border:none; }
+.actions button { margin-top:4px; padding:8px; width:100%; cursor:pointer; }
+.list { flex:1; overflow-y:auto; margin-top:8px; }
+.note-item { padding:8px; border-bottom:1px solid #333; cursor:pointer; }
+.note-item.active { background:#333; }
