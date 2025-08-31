@@ -1,22 +1,47 @@
+// src/utils/exportNotes.js
 
-export default function NoteEditor({ note, onChange, onDelete }) {
-  if(!note) return null;
+import { saveAs } from "file-saver";
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import jsPDF from "jspdf";
 
-  return (
-    <div className="editor" style={{flex:1, padding:16}}>
-      <input
-        style={{width:'100%', padding:8, fontSize:16, marginBottom:8}}
-        value={note.title}
-        placeholder="Note Title"
-        onChange={e => onChange({ ...note, title:e.target.value, updatedAt:Date.now() })}
-      />
-      <textarea
-        style={{width:'100%', height:'60%', padding:8}}
-        value={note.content}
-        placeholder="Note Content"
-        onChange={e => onChange({ ...note, content:e.target.value, updatedAt:Date.now() })}
-      />
-      <button style={{marginTop:8}} onClick={() => onDelete(note.id)}>Delete Note</button>
-    </div>
-  );
-}
+/**
+ * Export note to Word (.docx)
+ */
+export const exportToWord = (note) => {
+  if (!note) return;
+
+  const doc = new Document({
+    sections: [
+      {
+        properties: {},
+        children: [
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: note.title || "Untitled Note",
+                bold: true,
+                size: 28,
+              }),
+            ],
+          }),
+          new Paragraph({ text: "" }),
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: note.content || "",
+                size: 24,
+              }),
+            ],
+          }),
+        ],
+      },
+    ],
+  });
+
+  Packer.toBlob(doc).then((blob) => {
+    saveAs(blob, `${note.title || "note"}.docx`);
+  });
+};
+
+/**
+ * Export note to PDF*
